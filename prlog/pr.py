@@ -31,11 +31,11 @@ gql = """
 """
 
 
-def all_pr_data(json):
-    return map(pr_data, pydash.get(json, 'data.repository.pullRequests.edges'))
+def all_data(json):
+    return map(item, pydash.get(json, 'data.repository.pullRequests.edges'))
 
 
-def pr_data(json):
+def item(json):
     paths = {
         'id': 'node.id',
         'number': 'node.number',
@@ -55,7 +55,7 @@ def paging(json):
     return pydash.get(json, 'data.repository.pullRequests.pageInfo')
 
 
-def pr_writer(stream):
+def writer(stream):
     fieldnames = [
         'id',
         'number',
@@ -70,9 +70,9 @@ def pr_writer(stream):
     return csv.DictWriter(stream, fieldnames)
 
 
-def write_prs(stream, data):
-    return pr_writer(stream).writerows(map(participants.list_to_string, data))
+def write_items(stream, data):
+    return writer(stream).writerows(map(participants.list_to_string, data))
 
 
 def write_header(stream):
-    pr_writer(stream).writeheader()
+    writer(stream).writeheader()

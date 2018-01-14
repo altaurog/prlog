@@ -2,14 +2,14 @@ import argparse
 import functools
 import sys
 
-from . import github, graphql, pr
+from . import github, graphql, pr, issue
 
 def main(options):
     client = make_client(options)
-    pr.write_header(options.output)
+    options.query.write_header(options.output)
     for page in graphql.page(client, options.page_size, options.max_pages):
         print(page)
-        pr.write_prs(options.output, page)
+        options.query.write_items(options.output, page)
 
 
 def make_client(options):
@@ -17,16 +17,18 @@ def make_client(options):
         graphql.execute,
         github.endpoint,
         options.token,
-        pr.gql,
+        options.query.gql,
         owner=options.owner,
         repo=options.repo
     )
     def request(*args, **kwargs):
         res = q(*args, **kwargs)
         json = res.json()
-        return pr.all_pr_data(json), pr.paging(json)
+        return options.query.all_data(json), options.query.paging(json)
     return request
 
+
+modules = {m.__name__.split('.')[-1]: m for m in [pr, issue]}
 
 
 def get_options(args):
@@ -37,10 +39,17 @@ def get_options(args):
     parser.add_argument('-p', '--page-size', type=int, default=100)
     parser.add_argument('--max-pages', type=int)
     parser.add_argument(
+        '-q',
+        '--query',
+        type=lambda m: modules[m],
+        default='pr',
+        choices=list(modules.values()),
+    )
+    parser.add_argument(
         '-O',
         '--output',
         type=argparse.FileType('w', encoding='UTF-8'),
-        default='-'
+        default='-',
     )
     return parser.parse_args(args)
 

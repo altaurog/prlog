@@ -29,11 +29,11 @@ gql = """
 """
 
 
-def all_issue_data(json):
-    return map(issue_data, pydash.get(json, 'data.repository.issues.edges'))
+def all_data(json):
+    return map(item, pydash.get(json, 'data.repository.issues.edges'))
 
 
-def issue_data(json):
+def item(json):
     paths = {
         'id': 'node.id',
         'number': 'node.number',
@@ -51,7 +51,7 @@ def paging(json):
     return pydash.get(json, 'data.repository.issues.pageInfo')
 
 
-def issue_writer(stream):
+def writer(stream):
     fieldnames = [
         'id',
         'number',
@@ -64,9 +64,9 @@ def issue_writer(stream):
     return csv.DictWriter(stream, fieldnames)
 
 
-def write_issues(stream, data):
-    return issue_writer(stream).writerows(map(participants.list_to_string, data))
+def write_items(stream, data):
+    return writer(stream).writerows(map(participants.list_to_string, data))
 
 
 def write_header(stream):
-    issue_writer(stream).writeheader()
+    writer(stream).writeheader()
