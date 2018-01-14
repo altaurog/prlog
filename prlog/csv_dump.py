@@ -8,7 +8,6 @@ def main(options):
     client = make_client(options)
     options.query.write_header(options.output)
     for page in graphql.page(client, options.page_size, options.max_pages):
-        print(page)
         options.query.write_items(options.output, page)
 
 
