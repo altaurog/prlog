@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
     name='pull-log',
@@ -9,10 +9,9 @@ setup(
     license=['BSD'],
     packages=[
         "prlog",
-        "prlog.query",
     ],
     zip_safe=False,
-    install_requires=['requests'],
+    install_requires=['requests', 'pandas', 'matplotlib'],
     entry_points={
         'console_scripts': [
             # 'commandname=module.path:function'
