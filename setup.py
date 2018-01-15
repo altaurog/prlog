@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='pull-log',
+    name='prlog',
     version=0.1,
     description='Retrieves and analyses github pull request log',
     author='Aryeh Leib Taurog',
@@ -14,7 +14,9 @@ setup(
     install_requires=['requests', 'pandas', 'matplotlib'],
     entry_points={
         'console_scripts': [
-            # 'commandname=module.path:function'
+            'csv_dump=prlog.csv_dump:run',
+            'plot_counts=prlog.plot_counts:run',
+            'csv_dump=prlog.csv_dump:run',
         ],
     },
 )

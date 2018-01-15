@@ -36,6 +36,10 @@ def get_options(args):
     return parser.parse_args(args)
 
 
-if __name__ == '__main__':
+def run():
     options = get_options(sys.argv[1:])
     main(options)
+
+
+if __name__ == '__main__':
+    run()
