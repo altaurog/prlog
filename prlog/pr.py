@@ -1,6 +1,6 @@
 import csv
 import pydash
-from . import participants
+from . import op, participants
 
 gql = """
     query PR($owner: String!, $repo:String!, $count: Int!, $after: String) { 
@@ -31,24 +31,24 @@ gql = """
 """
 
 
+get_pr_data = op.pathgetter('node',
+    id='id',
+    number='number',
+    title='title',
+    author='author.login',
+    merge_commit='mergeCommit.id',
+    merged_at='mergedAt',
+    published_at='publishedAt',
+    participants='participants.nodes',
+    more_participants='participants.pageInfo.hasNextPage',
+)
+
+
+item = lambda json: participants.json_to_list(get_pr_data(json))
+
+
 def all_data(json):
     return map(item, pydash.get(json, 'data.repository.pullRequests.edges'))
-
-
-def item(json):
-    paths = {
-        'id': 'node.id',
-        'number': 'node.number',
-        'title': 'node.title',
-        'author': 'node.author.login',
-        'merge_commit': 'node.mergeCommit.id',
-        'merged_at': 'node.mergedAt',
-        'published_at': 'node.publishedAt',
-        'participants': 'node.participants.nodes',
-        'more_participants': 'node.participants.pageInfo.hasNextPage',
-    }
-    data = { key: pydash.get(json, path) for key, path in paths.items() }
-    return participants.json_to_list(data)
 
 
 def paging(json):
