@@ -2,7 +2,7 @@ import argparse
 import functools
 import sys
 
-from . import github, graphql, pr, issue
+from . import github, graphql, pr, prreview, issue
 
 def main(options):
     client = make_client(options)
@@ -27,7 +27,7 @@ def make_client(options):
     return request
 
 
-modules = {m.__name__.split('.')[-1]: m for m in [pr, issue]}
+modules = {m.__name__.split('.')[-1]: m for m in [pr, prreview, issue]}
 
 
 def get_options(args):
