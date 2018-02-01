@@ -3,7 +3,7 @@ import pydash
 from . import op, participants
 
 gql = """
-    query PR($owner: String!, $repo:String!, $count: Int!, $after: String) { 
+    query Issue($owner: String!, $repo:String!, $count: Int!, $after: String) { 
       repository(owner: $owner, name:$repo) {
         issues(first:$count, after:$after) {
           edges {
