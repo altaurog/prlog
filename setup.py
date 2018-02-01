@@ -16,7 +16,6 @@ setup(
         'console_scripts': [
             'csv_dump=prlog.csv_dump:run',
             'plot_counts=prlog.plot_counts:run',
-            'csv_dump=prlog.csv_dump:run',
         ],
     },
 )
